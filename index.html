@@ -1,0 +1,1274 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PREZIO. — Présence Digitale Premium</title>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,600;0,700;1,400&family=Hanken+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --midnight: #0D1B2A;
+  --midnight-light: #122030;
+  --midnight-mid: #1A2D40;
+  --gold: #C9A84C;
+  --gold-light: #E2C06A;
+  --gold-dim: #8A6A28;
+  --cream: #F5F0E8;
+  --cream-dim: #C8C0B0;
+  --white: #ffffff;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--midnight);
+  color: var(--cream);
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-weight: 300;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* Custom cursor */
+.cursor {
+  position: fixed;
+  width: 8px; height: 8px;
+  background: var(--gold);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transition: transform 0.1s;
+  mix-blend-mode: screen;
+}
+.cursor-ring {
+  position: fixed;
+  width: 32px; height: 32px;
+  border: 1px solid var(--gold);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9998;
+  transition: all 0.15s ease;
+  opacity: 0.5;
+}
+
+/* Grain overlay */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 1000;
+  opacity: 0.3;
+}
+
+/* Nav */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 24px 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(to bottom, rgba(13,27,42,0.95) 0%, transparent 100%);
+  backdrop-filter: blur(4px);
+}
+
+.nav-logo {
+  font-family: 'Bodoni Moda', serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--gold);
+  letter-spacing: 4px;
+  text-decoration: none;
+}
+
+.nav-links {
+  display: flex;
+  gap: 40px;
+  list-style: none;
+}
+
+.nav-links a {
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--cream-dim);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+.nav-links a:hover { color: var(--gold); }
+
+.nav-cta {
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--midnight);
+  background: var(--gold);
+  padding: 12px 24px;
+  text-decoration: none;
+  transition: all 0.3s;
+}
+.nav-cta:hover {
+  background: var(--gold-light);
+  box-shadow: 0 0 30px rgba(201,168,76,0.4);
+}
+
+/* HERO */
+#hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  padding: 120px 60px 80px;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 70% 50%, rgba(201,168,76,0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 60% at 20% 80%, rgba(13,27,42,0.8) 0%, transparent 70%),
+    linear-gradient(135deg, #0D1B2A 0%, #0A1520 40%, #0D1B2A 100%);
+}
+
+.hero-line {
+  position: absolute;
+  top: 0; left: 60px; right: 60px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  opacity: 0.3;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 900px;
+  text-align: center;
+}
+
+.hero-eyebrow {
+  font-size: 11px;
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 32px;
+  opacity: 0;
+  animation: fadeUp 1s ease 0.3s forwards;
+}
+
+.hero-title {
+  font-family: 'Bodoni Moda', serif;
+  font-size: clamp(56px, 8vw, 110px);
+  font-weight: 700;
+  line-height: 0.95;
+  color: var(--cream);
+  margin-bottom: 16px;
+  opacity: 0;
+  animation: fadeUp 1s ease 0.5s forwards;
+}
+
+.hero-title em {
+  font-style: italic;
+  color: var(--gold);
+}
+
+.hero-subtitle {
+  font-size: clamp(14px, 1.5vw, 18px);
+  font-weight: 300;
+  color: var(--cream-dim);
+  line-height: 1.7;
+  max-width: 560px;
+  margin: 0 auto 56px;
+  opacity: 0;
+  animation: fadeUp 1s ease 0.7s forwards;
+}
+
+.hero-cta {
+  display: inline-block;
+  padding: 20px 52px;
+  background: var(--gold);
+  color: var(--midnight);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+  opacity: 0;
+  animation: fadeUp 1s ease 0.9s forwards;
+  transition: all 0.4s;
+}
+
+.hero-cta::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--gold-light);
+  transform: translateX(-100%);
+  transition: transform 0.4s ease;
+}
+.hero-cta:hover::before { transform: translateX(0); }
+.hero-cta span { position: relative; z-index: 1; }
+.hero-cta:hover {
+  box-shadow: 0 0 60px rgba(201,168,76,0.5), 0 0 120px rgba(201,168,76,0.2);
+}
+
+.hero-scroll {
+  position: absolute;
+  bottom: 48px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  opacity: 0;
+  animation: fadeIn 1s ease 1.4s forwards;
+}
+
+.hero-scroll span {
+  font-size: 9px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--gold-dim);
+}
+
+.scroll-line {
+  width: 1px;
+  height: 60px;
+  background: linear-gradient(to bottom, var(--gold), transparent);
+  animation: scrollPulse 2s ease-in-out infinite;
+}
+
+/* SECTIONS COMMON */
+section {
+  padding: 120px 60px;
+  position: relative;
+}
+
+.section-divider {
+  width: 60px;
+  height: 1px;
+  background: var(--gold);
+  margin-bottom: 20px;
+}
+
+.section-eyebrow {
+  font-size: 10px;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 24px;
+}
+
+/* PROBLÈME */
+#probleme {
+  background: linear-gradient(180deg, var(--midnight) 0%, #091520 100%);
+  text-align: center;
+  overflow: hidden;
+}
+
+.probleme-inner {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.probleme-title {
+  font-family: 'Bodoni Moda', serif;
+  font-size: clamp(36px, 5vw, 64px);
+  font-weight: 600;
+  line-height: 1.15;
+  color: var(--cream);
+  margin-bottom: 32px;
+}
+
+.probleme-title strong {
+  color: var(--gold);
+  font-style: italic;
+}
+
+.probleme-text {
+  font-size: 17px;
+  font-weight: 300;
+  color: var(--cream-dim);
+  line-height: 1.8;
+  max-width: 620px;
+  margin: 0 auto 60px;
+}
+
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: rgba(201,168,76,0.15);
+  border: 1px solid rgba(201,168,76,0.15);
+}
+
+.stat-item {
+  background: var(--midnight);
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.stat-number {
+  font-family: 'Bodoni Moda', serif;
+  font-size: 52px;
+  font-weight: 700;
+  color: var(--gold);
+  line-height: 1;
+  margin-bottom: 12px;
+}
+
+.stat-label {
+  font-size: 12px;
+  letter-spacing: 1px;
+  color: var(--cream-dim);
+  line-height: 1.5;
+}
+
+/* OFFRES */
+#offres {
+  background: #091520;
+}
+
+.offres-header {
+  text-align: center;
+  margin-bottom: 72px;
+}
+
+.offres-title {
+  font-family: 'Bodoni Moda', serif;
+  font-size: clamp(36px, 4vw, 56px);
+  font-weight: 700;
+  color: var(--cream);
+}
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.card {
+  position: relative;
+  padding: 48px 36px;
+  background: linear-gradient(145deg, var(--midnight-light), var(--midnight));
+  border: 1px solid rgba(201,168,76,0.15);
+  overflow: hidden;
+  transition: all 0.4s ease;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+
+.card:hover {
+  border-color: rgba(201,168,76,0.4);
+  transform: translateY(-8px);
+  box-shadow: 0 32px 64px rgba(0,0,0,0.4), 0 0 40px rgba(201,168,76,0.08);
+}
+.card:hover::before { opacity: 1; }
+
+.card.featured {
+  border-color: rgba(201,168,76,0.4);
+  background: linear-gradient(145deg, #1A2D40, #122030);
+}
+.card.featured::before { opacity: 1; }
+.card.featured::after {
+  content: 'RECOMMANDÉ';
+  position: absolute;
+  top: 20px; right: 20px;
+  font-size: 8px;
+  letter-spacing: 3px;
+  color: var(--midnight);
+  background: var(--gold);
+  padding: 5px 12px;
+}
+
+.card-icon {
+  font-size: 28px;
+  margin-bottom: 24px;
+  display: block;
+}
+
+.card-name {
+  font-size: 11px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 16px;
+}
+
+.card-price {
+  font-family: 'Bodoni Moda', serif;
+  font-size: 48px;
+  font-weight: 700;
+  color: var(--cream);
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.card-price span {
+  font-size: 16px;
+  font-weight: 300;
+  color: var(--cream-dim);
+  font-family: 'Hanken Grotesk', sans-serif;
+}
+
+.card-period {
+  font-size: 12px;
+  color: var(--gold-dim);
+  margin-bottom: 32px;
+}
+
+.card-divider {
+  width: 40px;
+  height: 1px;
+  background: rgba(201,168,76,0.3);
+  margin-bottom: 28px;
+}
+
+.card-features {
+  list-style: none;
+  margin-bottom: 40px;
+}
+
+.card-features li {
+  font-size: 13px;
+  color: var(--cream-dim);
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.card-features li::before {
+  content: '';
+  width: 4px; height: 4px;
+  background: var(--gold);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.card-btn {
+  display: block;
+  text-align: center;
+  padding: 14px;
+  border: 1px solid rgba(201,168,76,0.4);
+  color: var(--gold);
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: all 0.3s;
+}
+
+.card-btn:hover, .card.featured .card-btn {
+  background: var(--gold);
+  color: var(--midnight);
+  border-color: var(--gold);
+}
+
+/* SECTEURS */
+#secteurs {
+  background: var(--midnight);
+  overflow: hidden;
+}
+
+.secteurs-header {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: end;
+  margin-bottom: 72px;
+}
+
+.secteurs-title {
+  font-family: 'Bodoni Moda', serif;
+  font-size: clamp(36px, 4vw, 56px);
+  font-weight: 700;
+  color: var(--cream);
+  line-height: 1.1;
+}
+
+.secteurs-text {
+  font-size: 15px;
+  color: var(--cream-dim);
+  line-height: 1.8;
+}
+
+.secteurs-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 2px;
+}
+
+.secteur-item {
+  position: relative;
+  aspect-ratio: 3/4;
+  background: var(--midnight-mid);
+  overflow: hidden;
+  cursor: none;
+  group: true;
+}
+
+.secteur-bg {
+  position: absolute;
+  inset: 0;
+  transition: transform 0.6s ease;
+}
+
+.secteur-item:hover .secteur-bg { transform: scale(1.08); }
+
+.secteur-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(13,27,42,0.95) 0%, rgba(13,27,42,0.3) 60%, transparent 100%);
+}
+
+.secteur-content {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 28px 20px;
+}
+
+.secteur-icon {
+  font-size: 24px;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.secteur-name {
+  font-family: 'Bodoni Moda', serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--cream);
+  margin-bottom: 4px;
+}
+
+.secteur-sub {
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+/* Secteur backgrounds */
+.s1 .secteur-bg { background: linear-gradient(135deg, #1a0a1a 0%, #2d1040 100%); }
+.s2 .secteur-bg { background: linear-gradient(135deg, #1a0808 0%, #3d1010 100%); }
+.s3 .secteur-bg { background: linear-gradient(135deg, #0a1a0a 0%, #102820 100%); }
+.s4 .secteur-bg { background: linear-gradient(135deg, #1a1208 0%, #2d2010 100%); }
+.s5 .secteur-bg { background: linear-gradient(135deg, #080a1a 0%, #10153d 100%); }
+
+/* PROCESS */
+#process {
+  background: linear-gradient(180deg, #091520 0%, var(--midnight) 100%);
+}
+
+.process-header {
+  text-align: center;
+  margin-bottom: 80px;
+}
+
+.process-title {
+  font-family: 'Bodoni Moda', serif;
+  font-size: clamp(36px, 4vw, 56px);
+  font-weight: 700;
+  color: var(--cream);
+}
+
+.process-steps {
+  display: grid;
+  grid-template-columns: 1fr 60px 1fr 60px 1fr;
+  align-items: center;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.process-arrow {
+  text-align: center;
+  color: var(--gold);
+  font-size: 20px;
+  opacity: 0.4;
+}
+
+.process-step {
+  text-align: center;
+  padding: 48px 32px;
+  border: 1px solid rgba(201,168,76,0.12);
+  background: rgba(13,27,42,0.5);
+  position: relative;
+  transition: all 0.4s;
+}
+
+.process-step:hover {
+  border-color: rgba(201,168,76,0.35);
+  background: rgba(26,45,64,0.7);
+}
+
+.process-number {
+  font-family: 'Bodoni Moda', serif;
+  font-size: 64px;
+  font-weight: 700;
+  color: rgba(201,168,76,0.1);
+  line-height: 1;
+  margin-bottom: 16px;
+}
+
+.process-step-icon {
+  font-size: 28px;
+  margin-bottom: 16px;
+}
+
+.process-step-name {
+  font-family: 'Bodoni Moda', serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--cream);
+  margin-bottom: 12px;
+}
+
+.process-step-desc {
+  font-size: 13px;
+  color: var(--cream-dim);
+  line-height: 1.7;
+}
+
+/* PREUVES */
+#preuves {
+  background: var(--midnight);
+  text-align: center;
+}
+
+.preuves-title {
+  font-family: 'Bodoni Moda', serif;
+  font-size: clamp(36px, 4vw, 56px);
+  font-weight: 700;
+  color: var(--cream);
+  margin-bottom: 16px;
+}
+
+.preuves-sub {
+  font-size: 15px;
+  color: var(--cream-dim);
+  margin-bottom: 80px;
+}
+
+.preuves-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2px;
+  background: rgba(201,168,76,0.1);
+  border: 1px solid rgba(201,168,76,0.1);
+  margin-bottom: 80px;
+}
+
+.preuve-item {
+  background: var(--midnight);
+  padding: 52px 24px;
+}
+
+.preuve-number {
+  font-family: 'Bodoni Moda', serif;
+  font-size: 56px;
+  font-weight: 700;
+  color: var(--gold);
+  line-height: 1;
+  margin-bottom: 12px;
+}
+
+.preuve-label {
+  font-size: 12px;
+  color: var(--cream-dim);
+  line-height: 1.6;
+  letter-spacing: 0.5px;
+}
+
+.testimonial {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 56px;
+  border: 1px solid rgba(201,168,76,0.2);
+  position: relative;
+  background: rgba(13,27,42,0.5);
+}
+
+.testimonial::before {
+  content: '"';
+  position: absolute;
+  top: -24px; left: 40px;
+  font-family: 'Bodoni Moda', serif;
+  font-size: 80px;
+  color: var(--gold);
+  line-height: 1;
+}
+
+.testimonial-text {
+  font-family: 'Bodoni Moda', serif;
+  font-size: 20px;
+  font-style: italic;
+  color: var(--cream);
+  line-height: 1.7;
+  margin-bottom: 28px;
+}
+
+.testimonial-author {
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+/* CTA FINAL */
+#cta-final {
+  background: linear-gradient(135deg, #091520 0%, var(--midnight-mid) 50%, #091520 100%);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+#cta-final::before {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(201,168,76,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.cta-eyebrow {
+  font-size: 10px;
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 28px;
+}
+
+.cta-title {
+  font-family: 'Bodoni Moda', serif;
+  font-size: clamp(40px, 6vw, 80px);
+  font-weight: 700;
+  color: var(--cream);
+  line-height: 1.05;
+  margin-bottom: 24px;
+}
+
+.cta-title em { color: var(--gold); font-style: italic; }
+
+.cta-sub {
+  font-size: 16px;
+  color: var(--cream-dim);
+  max-width: 500px;
+  margin: 0 auto 56px;
+  line-height: 1.7;
+}
+
+.cta-big {
+  display: inline-block;
+  padding: 22px 64px;
+  background: var(--gold);
+  color: var(--midnight);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s;
+}
+
+.cta-big:hover {
+  box-shadow: 0 0 80px rgba(201,168,76,0.6), 0 0 160px rgba(201,168,76,0.2);
+  transform: scale(1.03);
+}
+
+.cta-note {
+  margin-top: 20px;
+  font-size: 11px;
+  color: var(--gold-dim);
+  letter-spacing: 1px;
+}
+
+/* FOOTER */
+footer {
+  background: #060E16;
+  padding: 60px;
+  border-top: 1px solid rgba(201,168,76,0.1);
+}
+
+.footer-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 60px;
+  align-items: start;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.footer-brand {
+  font-family: 'Bodoni Moda', serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--gold);
+  letter-spacing: 3px;
+  margin-bottom: 16px;
+}
+
+.footer-tagline {
+  font-size: 12px;
+  color: var(--cream-dim);
+  letter-spacing: 2px;
+}
+
+.footer-col-title {
+  font-size: 10px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 24px;
+}
+
+.footer-links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.footer-links a {
+  font-size: 13px;
+  color: var(--cream-dim);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+.footer-links a:hover { color: var(--gold); }
+
+.footer-contact p {
+  font-size: 13px;
+  color: var(--cream-dim);
+  margin-bottom: 8px;
+}
+
+.footer-contact a {
+  color: var(--gold);
+  text-decoration: none;
+}
+
+.footer-bottom {
+  border-top: 1px solid rgba(201,168,76,0.08);
+  margin-top: 48px;
+  padding-top: 32px;
+  text-align: center;
+  font-size: 11px;
+  color: rgba(200,192,176,0.3);
+  letter-spacing: 1px;
+  max-width: 1100px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* SCROLL ANIMATIONS */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+
+/* KEYFRAMES */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes scrollPulse {
+  0%, 100% { opacity: 1; transform: scaleY(1); }
+  50% { opacity: 0.3; transform: scaleY(0.6); }
+}
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+  nav { padding: 20px 32px; }
+  .nav-links { display: none; }
+  section { padding: 80px 32px; }
+  #hero { padding: 100px 32px 80px; }
+  .cards-grid { grid-template-columns: 1fr; gap: 16px; max-width: 420px; }
+  .secteurs-grid { grid-template-columns: repeat(2, 1fr); }
+  .secteur-item:last-child { grid-column: span 2; }
+  .process-steps { grid-template-columns: 1fr; gap: 16px; }
+  .process-arrow { display: none; }
+  .preuves-grid { grid-template-columns: repeat(2, 1fr); }
+  .footer-inner { grid-template-columns: 1fr; gap: 40px; }
+  .secteurs-header { grid-template-columns: 1fr; gap: 24px; }
+  footer { padding: 60px 32px; }
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">PREZIO.</a>
+  <ul class="nav-links">
+    <li><a href="#offres">Offres</a></li>
+    <li><a href="#secteurs">Secteurs</a></li>
+    <li><a href="#process">Process</a></li>
+  </ul>
+  <a href="#cta-final" class="nav-cta">Audit gratuit</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-line"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">Agence de Présence Digitale</p>
+    <h1 class="hero-title">Votre business<br>mérite d'être <em>trouvé.</em></h1>
+    <p class="hero-subtitle">Sites vitrines premium, SEO local et applications sur-mesure pour les établissements qui refusent l'invisibilité digitale.</p>
+    <a href="#cta-final" class="hero-cta"><span>Demander un audit gratuit</span></a>
+  </div>
+  <div class="hero-scroll">
+    <span>Découvrir</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- PROBLÈME -->
+<section id="probleme">
+  <div class="probleme-inner">
+    <div class="section-divider reveal"></div>
+    <p class="section-eyebrow reveal">Le constat</p>
+    <h2 class="probleme-title reveal">Vos clients cherchent<br>en ligne. <strong>Vous n'y êtes pas.</strong></h2>
+    <p class="probleme-text reveal reveal-delay-1">80% des consommateurs recherchent un établissement sur Google avant de se déplacer. Sans présence digitale premium, vous perdez des clients chaque jour — au profit de concurrents qui ont compris l'enjeu.</p>
+    <div class="stats-row reveal reveal-delay-2">
+      <div class="stat-item">
+        <div class="stat-number">80%</div>
+        <div class="stat-label">des clients cherchent en ligne avant de se déplacer</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">3s</div>
+        <div class="stat-label">pour convaincre un visiteur de rester sur votre site</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">70%</div>
+        <div class="stat-label">des recherches locales passent par Google Maps</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OFFRES -->
+<section id="offres">
+  <div class="offres-header">
+    <div class="section-divider reveal" style="margin: 0 auto 20px;"></div>
+    <p class="section-eyebrow reveal">Nos offres</p>
+    <h2 class="offres-title reveal">Une solution <em style="font-family:'Bodoni Moda',serif;font-style:italic;color:var(--gold);">adaptée</em><br>à chaque ambition</h2>
+  </div>
+  <div class="cards-grid">
+    <div class="card reveal reveal-delay-1">
+      <span class="card-icon">◆</span>
+      <p class="card-name">Essentielle</p>
+      <div class="card-price">490<span>€</span></div>
+      <p class="card-period">/ mois + 900€ création</p>
+      <div class="card-divider"></div>
+      <ul class="card-features">
+        <li>Site vitrine professionnel</li>
+        <li>Hébergement inclus</li>
+        <li>Google My Business optimisé</li>
+        <li>SEO local — 1 mot-clé</li>
+        <li>Rapport mensuel</li>
+      </ul>
+      <a href="#cta-final" class="card-btn">Démarrer</a>
+    </div>
+    <div class="card featured reveal reveal-delay-2">
+      <span class="card-icon">◈</span>
+      <p class="card-name">Prestige</p>
+      <div class="card-price">790<span>€</span></div>
+      <p class="card-period">/ mois + 1 500€ création</p>
+      <div class="card-divider"></div>
+      <ul class="card-features">
+        <li>Site vitrine premium</li>
+        <li>Hébergement + domaine</li>
+        <li>Google My Business complet</li>
+        <li>SEO local — 3 mots-clés</li>
+        <li>Rapport mensuel détaillé</li>
+        <li>Support prioritaire 48h</li>
+      </ul>
+      <a href="#cta-final" class="card-btn">Démarrer</a>
+    </div>
+    <div class="card reveal reveal-delay-3">
+      <span class="card-icon">◇</span>
+      <p class="card-name">Billetterie</p>
+      <div class="card-price">99<span>€</span></div>
+      <p class="card-period">/ mois — jusqu'à 299€/mois</p>
+      <div class="card-divider"></div>
+      <ul class="card-features">
+        <li>App billetterie branded</li>
+        <li>Vos couleurs, votre marque</li>
+        <li>Commission 2% Stripe</li>
+        <li>Vos données clients</li>
+        <li>Pas de Shotgun, pas de fees</li>
+      </ul>
+      <a href="#cta-final" class="card-btn">Démarrer</a>
+    </div>
+  </div>
+</section>
+
+<!-- SECTEURS -->
+<section id="secteurs">
+  <div class="secteurs-header">
+    <div>
+      <div class="section-divider reveal"></div>
+      <p class="section-eyebrow reveal">Nos secteurs</p>
+      <h2 class="secteurs-title reveal">Des univers<br>qui exigent<br>l'<em style="font-family:'Bodoni Moda',serif;font-style:italic;color:var(--gold);">excellence.</em></h2>
+    </div>
+    <p class="secteurs-text reveal">Nous travaillons exclusivement avec des établissements qui ont compris que leur image digitale est le prolongement de leur excellence physique.</p>
+  </div>
+  <div class="secteurs-grid">
+    <div class="secteur-item s1 reveal">
+      <div class="secteur-bg"></div>
+      <div class="secteur-overlay"></div>
+      <div class="secteur-content">
+        <span class="secteur-icon">🎵</span>
+        <div class="secteur-name">Bars & Clubs</div>
+        <div class="secteur-sub">Nightlife & Entertainment</div>
+      </div>
+    </div>
+    <div class="secteur-item s2 reveal reveal-delay-1">
+      <div class="secteur-bg"></div>
+      <div class="secteur-overlay"></div>
+      <div class="secteur-content">
+        <span class="secteur-icon">🍷</span>
+        <div class="secteur-name">Cave à Vin</div>
+        <div class="secteur-sub">Vins & Épiceries Fines</div>
+      </div>
+    </div>
+    <div class="secteur-item s3 reveal reveal-delay-2">
+      <div class="secteur-bg"></div>
+      <div class="secteur-overlay"></div>
+      <div class="secteur-content">
+        <span class="secteur-icon">🏎️</span>
+        <div class="secteur-name">Moto & Pilotage</div>
+        <div class="secteur-sub">Sports Mécaniques</div>
+      </div>
+    </div>
+    <div class="secteur-item s4 reveal reveal-delay-3">
+      <div class="secteur-bg"></div>
+      <div class="secteur-overlay"></div>
+      <div class="secteur-content">
+        <span class="secteur-icon">🎨</span>
+        <div class="secteur-name">Décoration</div>
+        <div class="secteur-sub">Art & Design d'intérieur</div>
+      </div>
+    </div>
+    <div class="secteur-item s5 reveal reveal-delay-4">
+      <div class="secteur-bg"></div>
+      <div class="secteur-overlay"></div>
+      <div class="secteur-content">
+        <span class="secteur-icon">💎</span>
+        <div class="secteur-name">Luxe</div>
+        <div class="secteur-sub">Prestige & Haute Gamme</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section id="process">
+  <div class="process-header">
+    <div class="section-divider reveal" style="margin: 0 auto 20px;"></div>
+    <p class="section-eyebrow reveal">Notre méthode</p>
+    <h2 class="process-title reveal">Simple. Précis. <em style="font-family:'Bodoni Moda',serif;font-style:italic;color:var(--gold);">Efficace.</em></h2>
+  </div>
+  <div class="process-steps">
+    <div class="process-step reveal">
+      <div class="process-number">01</div>
+      <div class="process-step-icon">🔍</div>
+      <div class="process-step-name">Audit Gratuit</div>
+      <p class="process-step-desc">Analyse complète de votre présence digitale actuelle. Score détaillé, points critiques, opportunités identifiées.</p>
+    </div>
+    <div class="process-arrow">→</div>
+    <div class="process-step reveal reveal-delay-2">
+      <div class="process-number">02</div>
+      <div class="process-step-icon">✦</div>
+      <div class="process-step-name">Démo Personnalisée</div>
+      <p class="process-step-desc">Nous créons une démo de votre futur site avant même de signer. Vous voyez le résultat avant de décider.</p>
+    </div>
+    <div class="process-arrow">→</div>
+    <div class="process-step reveal reveal-delay-4">
+      <div class="process-number">03</div>
+      <div class="process-step-icon">🚀</div>
+      <div class="process-step-name">Lancement</div>
+      <p class="process-step-desc">Site en ligne, SEO activé, Google My Business optimisé. Résultats mesurables dès les 30 premiers jours.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PREUVES -->
+<section id="preuves">
+  <div class="section-divider reveal" style="margin: 0 auto 20px;"></div>
+  <p class="section-eyebrow reveal">Résultats</p>
+  <h2 class="preuves-title reveal">Des chiffres qui <em style="font-family:'Bodoni Moda',serif;font-style:italic;color:var(--gold);">parlent.</em></h2>
+  <p class="preuves-sub reveal">Mesurés sur l'ensemble de notre portefeuille clients après 90 jours d'accompagnement.</p>
+  <div class="preuves-grid reveal">
+    <div class="preuve-item">
+      <div class="preuve-number">+80%</div>
+      <div class="preuve-label">de visibilité locale sur Google en 90 jours</div>
+    </div>
+    <div class="preuve-item">
+      <div class="preuve-number">3x</div>
+      <div class="preuve-label">plus d'appels entrants après lancement</div>
+    </div>
+    <div class="preuve-item">
+      <div class="preuve-number">72h</div>
+      <div class="preuve-label">de délai entre signature et mise en ligne</div>
+    </div>
+    <div class="preuve-item">
+      <div class="preuve-number">2%</div>
+      <div class="preuve-label">de commission billetterie seulement vs 7-8% Shotgun</div>
+    </div>
+  </div>
+  <div class="testimonial reveal">
+    <p class="testimonial-text">PREZIO a transformé notre visibilité en ligne en quelques semaines. Nos réservations ont augmenté significativement dès le premier mois. Un investissement qui se rembourse seul.</p>
+    <p class="testimonial-author">— Client Prestige, Secteur Cave à Vins</p>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section id="cta-final">
+  <p class="cta-eyebrow reveal">Passez à l'action</p>
+  <h2 class="cta-title reveal">Obtenez votre<br><em>audit gratuit</em></h2>
+  <p class="cta-sub reveal">Sans engagement. Sans jargon. Un diagnostic honnête de votre présence digitale actuelle et ce qu'il faut faire pour l'améliorer.</p>
+  <a href="mailto:contact@prezio.fr?subject=Demande d'audit gratuit PREZIO" class="cta-big reveal">Demander mon audit gratuit</a>
+  <p class="cta-note reveal">Réponse sous 24h — Audit confidentiel et sans engagement</p>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand">PREZIO.</div>
+      <p class="footer-tagline">Présence Digitale Premium</p>
+    </div>
+    <div>
+      <p class="footer-col-title">Navigation</p>
+      <ul class="footer-links">
+        <li><a href="#offres">Nos offres</a></li>
+        <li><a href="#secteurs">Secteurs</a></li>
+        <li><a href="#process">Notre méthode</a></li>
+        <li><a href="#preuves">Résultats</a></li>
+      </ul>
+    </div>
+    <div class="footer-contact">
+      <p class="footer-col-title">Contact</p>
+      <p><a href="https://prezio.fr">prezio.fr</a></p>
+      <p><a href="mailto:contact@prezio.fr">contact@prezio.fr</a></p>
+      <p style="margin-top: 20px; font-size: 12px; color: rgba(200,192,176,0.4);">Disponible 7j/7 pour<br>les établissements premium</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 PREZIO. — Tous droits réservés — prezio.fr</p>
+  </div>
+</footer>
+
+<script>
+// Custom cursor
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+let mx = 0, my = 0, rx = 0, ry = 0;
+
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursor.style.left = mx - 4 + 'px';
+  cursor.style.top = my - 4 + 'px';
+});
+
+function animateRing() {
+  rx += (mx - rx - 16) * 0.12;
+  ry += (my - ry - 16) * 0.12;
+  ring.style.left = rx + 'px';
+  ring.style.top = ry + 'px';
+  requestAnimationFrame(animateRing);
+}
+animateRing();
+
+document.querySelectorAll('a, button').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    cursor.style.transform = 'scale(2.5)';
+    ring.style.transform = 'scale(1.5)';
+    ring.style.opacity = '0.8';
+  });
+  el.addEventListener('mouseleave', () => {
+    cursor.style.transform = 'scale(1)';
+    ring.style.transform = 'scale(1)';
+    ring.style.opacity = '0.5';
+  });
+});
+
+// Scroll reveal
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+reveals.forEach(el => observer.observe(el));
+
+// Nav scroll effect
+window.addEventListener('scroll', () => {
+  const nav = document.querySelector('nav');
+  if (window.scrollY > 80) {
+    nav.style.background = 'rgba(13,27,42,0.97)';
+    nav.style.boxShadow = '0 1px 0 rgba(201,168,76,0.1)';
+  } else {
+    nav.style.background = 'linear-gradient(to bottom, rgba(13,27,42,0.95) 0%, transparent 100%)';
+    nav.style.boxShadow = 'none';
+  }
+});
+
+// Smooth scroll for anchor links
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+</script>
+</body>
+</html>
